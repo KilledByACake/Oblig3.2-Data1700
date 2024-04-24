@@ -42,19 +42,10 @@ function bestillBilletter() {
     if (errors.length > 0) {
         displayErrorMessages(errors);
     } else {
-        $.ajax({
-            url: "/bestillinger/lagre",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(bestilling),
-            success: function(response) {
-                alert('Bestilling lagret!');
-                hentBestilling();
-                nullstillInput();
-            },
-            error: function(xhr, status, error) {
-                alert("En feil oppstod ved lagring av bestilling: " + xhr.responseText);
-            }
+        // Opprett et nytt skjemaobjekt
+        const formData = new FormData();
+        Object.keys(bestilling).forEach(key => {
+            formData.append(key, bestilling[key]);
         });
     }
     // Funksjon for å nullstille input-feltene i skjemaet etter vellykket lagring
@@ -63,7 +54,7 @@ function bestillBilletter() {
         $("#antall").val("");
         $("#fornavn").val("");
         $("#etternavn").val("");
-        $("#adresse").val("");  // Tilsett denne for å nullstille adressefeltet
+        $("#adresse").val("");
         $("#telefonnr").val("");
         $("#epost").val("");
     }
@@ -85,23 +76,20 @@ function resetErrorMessages() {
 // Henter og viser oppdatert liste over bestillinger
 function hentBestilling() {
     $.get("/bestillinger/hente", function(data) {
-        formaterData(data);
-    });
-}
-
-function formaterData(bestillinger) {
-    const table = $("#alleBestillinger");
-    table.empty(); // Tømmer tabellen før ny data legges til
-    bestillinger.forEach(function (bestilling) {
-        let rad = "<tr>" +
-            "<td>" + bestilling.film + "</td>" +
-            "<td>" + bestilling.antall + "</td>" +
-            "<td>" + bestilling.fornavn + "</td>" +
-            "<td>" + bestilling.etternavn + "</td>" +
-            "<td>" + bestilling.telefonnr + "</td>" +
-            "<td>" + bestilling.epost + "</td>" +
-            "</tr>";
-        table.append(rad);
+        const table = $("#alleBestillinger");
+        table.empty(); // Tømmer tabellen før ny data legges til
+        data.forEach(function (bestilling) {
+            let rad = "<tr>" +
+                "<td>" + bestilling.film + "</td>" +
+                "<td>" + bestilling.antall + "</td>" +
+                "<td>" + bestilling.fornavn + "</td>" +
+                "<td>" + bestilling.etternavn + "</td>" +
+                "<td>" + bestilling.adresse + "</td>" +
+                "<td>" + bestilling.telefonnr + "</td>" +
+                "<td>" + bestilling.epost + "</td>" +
+                "</tr>";
+            table.append(rad);
+        });
     });
 }
 

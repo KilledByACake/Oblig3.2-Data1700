@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bestillinger") // Base URL for alle handlinger i denne kontrolleren
 public class BestillingController {
     @Autowired
     private JdbcTemplate db;
@@ -23,7 +22,7 @@ public class BestillingController {
     //Hente bestilling
     @GetMapping("/hente")
     public List<Bestilling> hentAlleBestillinger() {
-        String sql = "SELECT * FROM Bestilling";
+        String sql = "SELECT * FROM Bestilling ORDER BY etternavn";
         return db.query(sql, new BeanPropertyRowMapper<>(Bestilling.class));
     }
 
