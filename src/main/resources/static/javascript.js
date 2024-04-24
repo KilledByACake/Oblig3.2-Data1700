@@ -78,6 +78,12 @@ function hentBestilling() {
     $.get("/bestillinger/hente", function(data) {
         const table = $("#alleBestillinger");
         table.empty(); // Tømmer tabellen før ny data legges til
+
+        // Sorter bestillingene etter etternavn
+        data.sort(function(a, b) {
+            return a.etternavn.localeCompare(b.etternavn);
+        });
+
         data.forEach(function (bestilling) {
             let rad = "<tr>" +
                 "<td>" + bestilling.film + "</td>" +
