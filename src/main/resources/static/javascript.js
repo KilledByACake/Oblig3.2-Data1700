@@ -8,6 +8,7 @@ function bestillBilletter() {
         telefonnr: $("#telefonnr").val(),
         epost: $("#epost").val()
     };
+    console.log(bestilling);
     //lagrer bestillingen og kjører henteBestilling()
     $.ajax({
         url: '/lagreBestillinger',

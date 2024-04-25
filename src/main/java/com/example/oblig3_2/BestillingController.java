@@ -23,7 +23,6 @@ public class BestillingController {
     // Endring fra "/deleteInfo" til "/slettBestillinger", slette alle bestillinger
     @DeleteMapping("/slettBestillinger")
     public void slettBestillinger() {
-        rep.alleBestillinger();
+        rep.slettBestillinger();
     }
-
 }
