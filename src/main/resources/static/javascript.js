@@ -1,5 +1,4 @@
 function bestillBilletter() {
-    let feil = 0;
     let bestilling = {
         film: $("#film").val(),
         antall: $("#antall").val(),
