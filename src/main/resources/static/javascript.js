@@ -10,68 +10,69 @@ function bestillBilletter () {
         telefonnr: $("#telefonnr").val(),
         epost: $("#epost").val()
     };
-        // Validering av filmvalg
-        if (bestilling.film === "") {
-            $("#filmError").html("<span style='color: deeppink'>Vennligst velg en film</span>");
-            feil++;
-        } else {
-            $("#filmError").empty();
-        }
+    // Validering av filmvalg
+    if (bestilling.film === "") {
+        $("#filmError").html("<span style='color: deeppink'>Vennligst velg en film</span>");
+        feil++;
+    } else {
+        $("#filmError").empty();
+    }
 
-        // Validering av antall billetter
-        if (isNaN(bestilling.antall) || bestilling.antall === "") {
-            $("#antallError").html("<span style='color: deeppink'>Vennligst angi antall billetter</span>");
-            feil++;
-        } else {
-            $("#antallError").empty();
-        }
+// Validering av antall billetter
+    if (isNaN(bestilling.antall) || bestilling.antall === "") {
+        $("#antallError").html("<span style='color: deeppink'>Vennligst angi antall billetter</span>");
+        feil++;
+    } else {
+        $("#antallError").empty();
+    }
 
-        // Validering av fornavn
-        if (bestilling.fornavn === "" || !isNaN(bestilling.fornavn)) {
-            $("#fornavnError").html("<span style='color: deeppink'>Vennligst skriv inn ditt fornavn</span>");
-            feil++;
-        } else {
-            $("#fornavnError").empty();
-        }
+// Validering av fornavn
+    if (bestilling.fornavn === "" || !isNaN(bestilling.fornavn)) {
+        $("#fornavnError").html("<span style='color: deeppink'>Vennligst skriv inn ditt fornavn</span>");
+        feil++;
+    } else {
+        $("#fornavnError").empty();
+    }
 
-        // Validering av etternavn
-        if (bestilling.etternavn === "" || !isNaN(bestilling.etternavn)) {
-            $("#etternavnError").html("<span style='color: deeppink'>Vennligst skriv inn ditt etternavn</span>");
-            feil++;
-        } else {
-            $("#etternavnError").empty();
-        }
+// Validering av etternavn
+    if (bestilling.etternavn === "" || !isNaN(bestilling.etternavn)) {
+        $("#etternavnError").html("<span style='color: deeppink'>Vennligst skriv inn ditt etternavn</span>");
+        feil++;
+    } else {
+        $("#etternavnError").empty();
+    }
 
-        // Validering av adresse
-        if (bestilling.adresse === "") {
-            $("#adresseError").html("<span style='color: deeppink'>Vennligst skriv inn din adresse</span>");
-            feil++;
-        } else {
-            $("#adresseError").empty();
-        }
+// Validering av adresse
+    if (bestilling.adresse === "") {
+        $("#adresseError").html("<span style='color: deeppink'>Vennligst skriv inn din adresse</span>");
+        feil++;
+    } else {
+        $("#adresseError").empty();
+    }
 
-        // Validering av telefonnummer
-        if (!bestilling.telefonnr.match(/^[0-9]{8}$/)) {
-            $("#telefonnrError").html("<span style='color: deeppink'>Vennligst skriv inn et gyldig telefonnummer</span>");
-            feil++;
-        } else {
-            $("#telefonnrError").empty();
-        }
+// Validering av telefonnummer
+    if (!bestilling.telefonnr.match(/^[0-9]{8}$/)) {
+        $("#telefonnrError").html("<span style='color: deeppink'>Vennligst skriv inn et gyldig telefonnummer</span>");
+        feil++;
+    } else {
+        $("#telefonnrError").empty();
+    }
 
-        // Validering av epost
-        if (!bestilling.epost.match(/^[A-Za-z\._\-0-9]+@[A-Za-z]+[\.][a-z]{2,4}$/)) {
-            $("#epostError").html("<span style='color: deeppink'>Vennligst skriv inn en gyldig epostadresse</span>");
-            feil++;
-        } else {
-            $("#epostError").empty();
-        }
+// Validering av epost
+    if (!bestilling.epost.match(/^[A-Za-z\._\-0-9]+@[A-Za-z]+[\.][a-z]{2,4}$/)) {
+        $("#epostError").html("<span style='color: deeppink'>Vennligst skriv inn en gyldig epostadresse</span>");
+        feil++;
+    } else {
+        $("#epostError").empty();
+    }
 
-        // Sjekker om alle feltene er korrekt utfylt og sender bestillingen
-        if (feil === 0) {
-            $.post("/lagreBestillinger", bestilling, function () {henteBestilling();});
-        } else {
-            alert("Vennligst fyll ut alle feltene korrekt.");
-        }
+    // Sjekker om alle feltene er korrekt utfylt og sender bestillingen
+    if (feil === 0) {
+        $.post("/lagreBestillinger", bestilling, function () {henteBestilling();});
+    } else {
+        alert("Vennligst fyll ut alle feltene korrekt.");
+    }
+
     // Tømmer feltene
     $("#velgFilm option").eq(0).prop("selected", true);
     $("#antall").val(""),
