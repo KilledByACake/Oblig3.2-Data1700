@@ -20,7 +20,7 @@ function bestillBilletter() {
         }
     });
     //Tømmer input
-    $("#film").prop("selectedIndex", 0);
+    $("#film").val("");
     $("#antall").val("");
     $("#fornavn").val("");
     $("#etternavn").val("");
