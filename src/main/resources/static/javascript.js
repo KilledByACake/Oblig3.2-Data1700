@@ -1,6 +1,6 @@
 function bestillBilletter() {
     let bestilling = {
-        film: $("#film").val(),
+        film: $("#velgFilm").find(":selected").text(),
         antall: $("#antall").val(),
         fornavn: $("#fornavn").val(),
         etternavn: $("#etternavn").val(),
