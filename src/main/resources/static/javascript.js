@@ -11,7 +11,7 @@ $(document).ready(function () {
 
         // Henter verdier og validerer dem
         const bestilling = {
-            film: $("#film").val(), // Riktig valg fra rullegardinmeny
+            film: $("#film").val(),
             antall: $("#antall").val(),
             fornavn: $("#fornavn").val(),
             etternavn: $("#etternavn").val(),
@@ -76,50 +76,66 @@ $(document).ready(function () {
             $("#epostError").empty();
         }
 
-        // Sjekker om alle feltene er korrekt utfylt
+        // Sjekker om alle feltene er korrekt utfylt og sender bestillingen
         if (feil === 0) {
-            $.post("/lagreBestilling", bestilling, function() {
-                hentBestillinger(); // Oppdaterer listen med bestillinger
+            // Konverterer bestilling til en JSON-streng før sending
+            const bestillingData = JSON.stringify(bestilling);
+
+            $.ajax({
+                url: "/bestillinger/lagreBestilling", // Endepunktet for POST-forespørselen
+                type: "POST",
+                contentType: "application/json", // Setter riktig content-type for JSON
+                data: bestillingData, // Sender den konverterte JSON-strengen
+                success: function(response) {
+                    alert("Bestillingen er lagret!");
+                    henteBestillinger(); // Må sørge for at denne funksjonen er definert
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("Feil ved lagring av bestilling: " + textStatus + " - " + errorThrown);
+                }
             });
         } else {
             alert("Vennligst fyll ut alle feltene korrekt.");
         }
     }
-
-    // Henter data fra server og skriver det ut i rader på nettsiden.
-    function hentBestillinger() {
-        $.get("/sortedByEtternavn", function(data) {
-            formaterData(data);
+    function henteBestillinger() {
+        $.ajax({
+            url: "/bestillinger/henteBestilling", // GET-endepunktet for å hente bestillinger
+            type: "GET",
+            contentType: "application/json",
+            success: function(bestillinger) {
+                $("#alleBestillinger").empty(); // Tømmer tabellen før nye bestillinger legges til
+                bestillinger.forEach(function(bestilling) {
+                    leggTilBestillingITabell(bestilling); // Bruker funksjonen for å legge til bestillinger i tabellen
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Feil ved henting av bestillinger: " + textStatus + " - " + errorThrown);
+            }
         });
     }
+    function leggTilBestillingITabell(bestilling) {
+        let rad = $("<tr></tr>"); // Lager en ny rad
+        rad.append(`<td>${bestilling.film}</td>`);
+        rad.append(`<td>${bestilling.antall}</td>`);
+        rad.append(`<td>${bestilling.fornavn}</td>`);
+        rad.append(`<td>${bestilling.etternavn}</td>`);
+        rad.append(`<td>${bestilling.telefonnr}</td>`);
+        rad.append(`<td>${bestilling.epost}</td>`);
+        $("#alleBestillinger").append(rad); // Legger til den nye raden i tabellen
+    }
 
-    // Formaterer data og viser det i en tabell
-    function formaterData(bestillinger) {
-        $("#alleBestillinger tr").remove();
-        bestillinger.forEach(function(bestilling) {
-            let rad = $("#alleBestillinger").append("<tr></tr>");
-            rad.append(`<td>${bestilling.film}</td>`);
-            rad.append(`<td>${bestilling.antall}</td>`);
-            rad.append(`<td>${bestilling.fornavn}</td>`);
-            rad.append(`<td>${bestilling.etternavn}</td>`);
-            rad.append(`<td>${bestilling.telefonnr}</td>`);
-            rad.append(`<td>${bestilling.epost}</td>`);
+    function slettBestilling() {
+        $.ajax({
+            url: "/bestillinger/sletteBestilling",
+            type: "DELETE",
+            success: function() {
+                $("#alleBestillinger").empty();
+                alert("Alle bestillinger er slettet.");
+            },
+            error: function() {
+                alert("En feil oppstod under sletting av bestillinger.");
+            }
         });
     }
 });
-
-// Funksjon for å slette alle bestillinger
-function slettBestilling() {
-    /* Sletter bestillingene fra databasen. */
-    $.ajax({
-        url: "/sletteBestilling",
-        type: "DELETE",
-        success: function() {
-            $("#alleBestillinger").empty();
-            alert("Alle bestillinger er slettet.");
-        },
-        error: function() {
-            alert("En feil oppstod under sletting av bestillinger.");
-        }
-    });
-}
