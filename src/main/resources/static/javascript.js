@@ -1,6 +1,6 @@
 function bestillBilletter() {
     let bestilling = {
-        film: $("film").find(":selected").text(),
+        film: $("#film").val(),
         antall: $("#antall").val(),
         fornavn: $("#fornavn").val(),
         etternavn: $("#etternavn").val(),
@@ -20,7 +20,7 @@ function bestillBilletter() {
         }
     });
     //Tømmer input
-    $("#film").prop("selectedIndex", 0);
+    $("#film").val("");
     $("#antall").val("");
     $("#fornavn").val("");
     $("#etternavn").val("");
@@ -36,7 +36,6 @@ function henteBestillinger() {
     });
 }
 
-//Formaterer Data
 // Formaterer Data
 function formaterData(bestillinger) {
     let ut = "<table class='table table-striped table-bordered'><tr>" +
