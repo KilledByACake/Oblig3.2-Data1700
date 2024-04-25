@@ -10,14 +10,8 @@ function bestillBilletter() {
     };
     console.log(bestilling);
     //lagrer bestillingen og kjører henteBestilling()
-    $.ajax({
-        url: '/lagreBestillinger',
-        type: 'POST',
-        data: JSON.stringify(bestilling),
-        contentType: 'application/json',
-        success: function() {
-            henteBestillinger();
-        }
+    $.post("/lagreBestillinger", bestilling, function() {
+        henteBestillinger()
     });
     //Tømmer input
     $("#film").val("");
