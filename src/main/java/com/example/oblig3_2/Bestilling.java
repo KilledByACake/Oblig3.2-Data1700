@@ -18,10 +18,6 @@ public class Bestilling {
     private String telefonnr;
     private String epost;
 
-    public Bestilling() {
-    }
-
-
     //Konstruktør
     public Bestilling(Long id, String film, int antall, String fornavn, String etternavn, String adresse, String telefonnr, String epost) {
         this.id = id;
@@ -32,6 +28,9 @@ public class Bestilling {
         this.adresse = adresse;
         this.telefonnr = telefonnr;
         this.epost = epost;
+    }
+
+    public Bestilling() {
     }
 
     // Get og Set

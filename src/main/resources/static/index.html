@@ -7,76 +7,59 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="javascript.js" defer></script>
 </head>
-<body>
+<body onload="bestillBilletter()">
 <div class="container">
   <section class="mb-5">
     <h1 class="mb-3">BESTILLING AV BESTILLINGER</h1>
-      <div class="mb-3">
+    <form onsubmit="bestillBilletter(); return false">
+      <div class="form-group">
         <label for="film" class="form-label">Film:</label>
-        <select class="form-select" id="film" name="film">
+        <select class="form-control" id="film" required>
           <option value="" selected>Velg film</option>
           <option value="Githubs Undergang">Githubs Undergang</option>
           <option value="The Hub of Gits">The Hub of Gits</option>
         </select>
-        <div id="filmError" class="form-text text-danger"></div>
       </div>
 
-      <div class="mb-3">
-        <label for="antall" class="form-label">Antall billetter:</label>
-        <input type="text" class="form-control" id="antall">
-        <div id="antallError" class="form-text text-danger"></div>
+      <div class="form-group">
+        <label for="antall">Antall billetter:</label>
+        <input type="text" class="form-control" id="antall" pattern="[0-9]+" title="Velg antall billetter!" required>
       </div>
 
-      <div class="mb-3">
-        <label for="fornavn" class="form-label">Fornavn:</label>
-        <input type="text" class="form-control" id="fornavn">
-        <div id="fornavnError" class="form-text text-danger"></div>
+      <div class="form-group">
+        <label for="fornavn">Fornavn:</label>
+        <input type="text" class="form-control" id="fornavn" required>
       </div>
 
-      <div class="mb-3">
-        <label for="etternavn" class="form-label">Etternavn:</label>
-        <input type="text" class="form-control" id="etternavn">
-        <div id="etternavnError" class="form-text text-danger"></div>
+      <div class="form-group">
+        <label for="etternavn">Etternavn:</label>
+        <input type="text" class="form-control" id="etternavn" required>
       </div>
 
-      <div class="mb-3">
-        <label for="adresse" class="form-label">Adresse:</label>
-        <input type="text" class="form-control" id="adresse">
-        <div id="adresseError" class="form-text text-danger"></div>
+      <div class="form-group">
+        <label for="adresse">Adresse:</label>
+        <input type="text" class="form-control" id="adresse" required>
       </div>
 
-      <div class="mb-3">
-        <label for="telefonnr" class="form-label">Telefonnummer:</label>
-        <input type="text" class="form-control" id="telefonnr">
-        <div id="telefonnrError" class="form-text text-danger"></div>
+      <div class="form-group">
+        <label for="telefonnr">Telefonnummer:</label>
+        <input type="text" class="form-control" id="telefonnr" pattern="[0-9]{8}" title="Ugyldig telefonnummer!" required>
       </div>
 
-      <div class="mb-3">
-        <label for="epost" class="form-label">Epostadresse:</label>
-        <input type="text" class="form-control" id="epost">
-        <div id="epostError" class="form-text text-danger"></div>
+      <div class="form-group">
+        <label for="epost">Epostadresse:</label>
+        <input type="text" class="form-control" id="epost"  pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}" title="Ugyldig epost!" required>
       </div>
-    <button id="bestillBilletter" onclick="bestillBilletter()" class="btn btn-primary">Send inn bestilling</button>
+
+    <button type=submit" id="bestillBilletter" class="btn btn-primary">Send inn bestilling</button>
+    </form>
   </section>
 
   <section>
     <h2>Bestillingsoversikt</h2>
     <h3>Alle bestilte billetter</h3>
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th>Film</th>
-        <th>Antall</th>
-        <th>Fornavn</th>
-        <th>Etternavn</th>
-        <th>Telefonnr</th>
-        <th>Epost</th>
-      </tr>
-      </thead>
-      <tbody id="henteBestillinger">
-      </tbody>
-    </table>
-    <button id="slettBestilling" onclick="slettBestilling()" class="btn btn-danger">Slett alle bestillinger</button>
+    <div id="utput"></div>
+    <button id="slettBestilling" class="btn btn-danger">Slett alle bestillinger</button>
   </section>
 </div>
 </body>

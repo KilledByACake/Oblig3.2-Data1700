@@ -9,8 +9,14 @@ function bestillBilletter() {
         epost: $("#epost").val()
     };
     //lagrer bestillingen og kjører henteBestilling()
-    $.post("/lagreBestillinger", bestilling, function () {
-        henteBestillinger();
+    $.ajax({
+        url: '/lagreBestillinger',
+        type: 'POST',
+        data: JSON.stringify(bestilling),
+        contentType: 'application/json',
+        success: function() {
+            henteBestillinger();
+        }
     });
     //Tømmer input
     $("#film").prop("selectedIndex", 0);
@@ -22,17 +28,16 @@ function bestillBilletter() {
     $("#epost").val("");
 }
 
-
-//Hente bestillinger
+// Hente bestillinger
 function henteBestillinger() {
-    $.post("/henteBestillinger", bestilling, function () {
-        formaterData();
-        console.log
+    $.get("/henteBestillinger", function (data) {
+        formaterData(data);
     });
 }
 
 //Formaterer Data
-function formaterData(bestilliner) {
+// Formaterer Data
+function formaterData(bestillinger) {
     let ut = "<table class='table table-striped table-bordered'><tr>" +
         "    <th><strong>Film</strong></th>\n" +
         "    <th><strong>Antall</strong></th>\n" +
@@ -45,16 +50,23 @@ function formaterData(bestilliner) {
         "</tr><br>";
 
     //  Gjør om til row
-    for (let o of orders) {
+    for (let b of bestillinger) {
         ut += "<tr>";
-        ut += "<td>" + b.film + "</td><td>" + o.antall + "</td><td>" + o.fornavn + "</td><td>" + o.etternavn + "</td><td>" +
-            o.adresse + "</td><td>" + o.telefonnr + "</td><td>" + o.epost + "</td><td></td>";
+        ut += "<td>" + b.film + "</td><td>" + b.antall + "</td><td>" + b.fornavn + "</td><td>" + b.etternavn + "</td><td>" +
+            b.adresse + "</td><td>" + b.telefonnr + "</td><td>" + b.epost + "</td><td></td>";
         ut += "</tr>";
     }
     ut += "</table>";
     $("#utput").html(ut);
 }
-//Sletter bestillingene
+
+// Sletter bestillingene
 function slettBestilling() {
-    $.post("/slettBestillinger", bestilling, function () {henteBestillinger().html;});
+    $.ajax({
+        url: "/slettBestillinger",
+        type: 'DELETE',
+        success: function() {
+            henteBestillinger();
+        }
+    });
 }
