@@ -4,7 +4,7 @@ $(document).ready(function() {
 
         // Henter verdier og validerer dem
         const billett = {
-            film: $("#film").val(),
+            film : $("#velgFilm").find(":selected").val(),
             antall: $("#antall").val(),
             fornavn: $("#fornavn").val(),
             etternavn: $("#etternavn").val(),
@@ -54,7 +54,7 @@ $(document).ready(function() {
         }
 
         // Validering av telefonnummer
-        if (!billett.telefonnr.match(/^[0-9]{4,13}$/)) {
+        if (!billett.telefonnr.match(/^[0-9]{8}$/)) {
             $("#telefonnrError").html("<span style='color: deeppink'>Vennligst skriv inn et gyldig telefonnummer</span>");
             feil++;
         } else {
