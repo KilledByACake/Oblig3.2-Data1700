@@ -1,6 +1,6 @@
 function bestillBilletter() {
     let bestilling = {
-        film: $("#velgFilm").find(":selected").text(),
+        film: $("film").find(":selected").text(),
         antall: $("#antall").val(),
         fornavn: $("#fornavn").val(),
         etternavn: $("#etternavn").val(),
@@ -14,7 +14,7 @@ function bestillBilletter() {
         henteBestillinger()
     });
     //Tømmer input
-    $("#film").val("");
+    $("#film").prop("selectedIndex", 0);
     $("#antall").val("");
     $("#fornavn").val("");
     $("#etternavn").val("");
