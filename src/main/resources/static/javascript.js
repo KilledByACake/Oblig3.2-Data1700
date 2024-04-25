@@ -9,72 +9,52 @@ function bestillBilletter() {
         telefonnr: $("#telefonnr").val(),
         epost: $("#epost").val()
     };
-
-    // Validering av filmvalg
-    $("#filmError").html(bestilling.film === "" ? "<span style='color: deeppink'>Vennligst velg en film</span>" : "");
-    feil += bestilling.film === "" ? 1 : 0;
-
-    // Validering av antall billetter
-    $("#antallError").html((isNaN(bestilling.antall) || bestilling.antall === "") ? "<span style='color: deeppink'>Vennligst angi antall billetter</span>" : "");
-    feil += (isNaN(bestilling.antall) || bestilling.antall === "") ? 1 : 0;
-
-    // Validering av fornavn
-    $("#fornavnError").html((bestilling.fornavn === "" || !isNaN(bestilling.fornavn)) ? "<span style='color: deeppink'>Vennligst skriv inn ditt fornavn</span>" : "");
-    feil += (bestilling.fornavn === "" || !isNaN(bestilling.fornavn)) ? 1 : 0;
-
-    // Validering av etternavn
-    $("#etternavnError").html((bestilling.etternavn === "" || !isNaN(bestilling.etternavn)) ? "<span style='color: deeppink'>Vennligst skriv inn ditt etternavn</span>" : "");
-    feil += (bestilling.etternavn === "" || !isNaN(bestilling.etternavn)) ? 1 : 0;
-
-    // Validering av adresse
-    $("#adresseError").html(bestilling.adresse === "" ? "<span style='color: deeppink'>Vennligst skriv inn din adresse</span>" : "");
-    feil += bestilling.adresse === "" ? 1 : 0;
-
-    // Validering av telefonnummer
-    $("#telefonnrError").html(!bestilling.telefonnr.match(/^[0-9]{8}$/) ? "<span style='color: deeppink'>Vennligst skriv inn et gyldig telefonnummer</span>" : "");
-    feil += !bestilling.telefonnr.match(/^[0-9]{8}$/) ? 1 : 0;
-
-    // Validering av epost
-    $("#epostError").html(!bestilling.epost.match(/^[A-Za-z\._\-0-9]+@[A-Za-z]+[\.][a-z]{2,4}$/) ? "<span style='color: deeppink'>Vennligst skriv inn en gyldig epostadresse</span>" : "");
-    feil += !bestilling.epost.match(/^[A-Za-z\._\-0-9]+@[A-Za-z]+[\.][a-z]{2,4}$/) ? 1 : 0;
-
-    if (feil === 0) {
-        $.post("/lagreBestillinger", bestilling, function () {
-            henteBestillinger();
-            $("#film").prop("selectedIndex", 0);
-            $("#antall").val("");
-            $("#fornavn").val("");
-            $("#etternavn").val("");
-            $("#adresse").val("");
-            $("#telefonnr").val("");
-            $("#epost").val("");
-        });
-    } else {
-        alert("Vennligst fyll ut alle feltene korrekt.");
-    }
-
-
-    //Hente bestillinger
-    function henteBestillinger() {
-        $.post("/henteBestillinger", bestilling, function () {formaterData();});
-    }
-
-    //
-    function formaterData(bestillinger) {
-        // Fjerner billettene som er printet ut(bare de som vises på siden ikke de på db) og deretter printer ny sortert liste
-        $("#henteBestillinger tr").remove();
-        bestillinger.forEach(function(bestilling) {
-            let rad = henteBestillinger.insertRow(0);
-            rad.insertCell(0).textContent = bestilling.film;
-            rad.insertCell(1).textContent = bestilling.antall;
-            rad.insertCell(2).textContent = bestilling.fornavn;
-            rad.insertCell(3).textContent = bestilling.etternavn;
-            rad.insertCell(4).textContent = bestilling.telefonnr;
-            rad.insertCell(5).textContent = bestilling.epost;
-        });
-    }
+    //lagrer bestillingen og kjører henteBestilling()
+    $.post("/lagreBestillinger", bestilling, function () {
+        henteBestillinger();
+    });
+    //Tømmer input
+    $("#film").prop("selectedIndex", 0);
+    $("#antall").val("");
+    $("#fornavn").val("");
+    $("#etternavn").val("");
+    $("#adresse").val("");
+    $("#telefonnr").val("");
+    $("#epost").val("");
 }
 
+
+//Hente bestillinger
+function henteBestillinger() {
+    $.post("/henteBestillinger", bestilling, function () {
+        formaterData();
+        console.log
+    });
+}
+
+//Formaterer Data
+function formaterData(bestilliner) {
+    let ut = "<table class='table table-striped table-bordered'><tr>" +
+        "    <th><strong>Film</strong></th>\n" +
+        "    <th><strong>Antall</strong></th>\n" +
+        "    <th><strong>Fornavn</strong></th>\n" +
+        "    <th><strong>Etternavn</strong></th>\n" +
+        "    <th><strong>Adresse</strong></th>\n" +
+        "    <th><strong>Epost</strong></th>\n" +
+        "    <th><strong>Slett</strong></th>\n" +
+        "    <th><strong>Endre</strong></th>\n" +
+        "</tr><br>";
+
+    //  Gjør om til row
+    for (let o of orders) {
+        ut += "<tr>";
+        ut += "<td>" + b.film + "</td><td>" + o.antall + "</td><td>" + o.fornavn + "</td><td>" + o.etternavn + "</td><td>" +
+            o.adresse + "</td><td>" + o.telefonnr + "</td><td>" + o.epost + "</td><td></td>";
+        ut += "</tr>";
+    }
+    ut += "</table>";
+    $("#utput").html(ut);
+}
 //Sletter bestillingene
 function slettBestilling() {
     $.post("/slettBestillinger", bestilling, function () {henteBestillinger().html;});
