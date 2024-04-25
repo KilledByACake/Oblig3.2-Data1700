@@ -11,7 +11,6 @@
 <div class="container">
   <section class="mb-5">
     <h1 class="mb-3">BESTILLING AV BESTILLINGER</h1>
-    <form id="sendInnForm">
       <div class="mb-3">
         <label for="film" class="form-label">Film:</label>
         <select class="form-select" id="film" name="film">
@@ -57,9 +56,7 @@
         <input type="text" class="form-control" id="epost">
         <div id="epostError" class="form-text text-danger"></div>
       </div>
-
-      <button id="bestillBilletter()" onclick="bestillBilletter()" class="btn btn-primary">Send inn bestilling</button>
-    </form>
+    <button id="bestillBilletter" onclick="bestillBilletter()" class="btn btn-primary">Send inn bestilling</button>
   </section>
 
   <section>
