@@ -1,10 +1,17 @@
-$(document).ready(function() {
+$(document).ready(function () {
+    // Knytter hendelsesbehandlere til form og sletteknapp
+    $('#sendInnForm').on('submit', function(e) {
+        e.preventDefault(); // Forhindrer vanlig form-innsending
+        validerFelter(); // Kaller valideringsfunksjonen
+    });
+
+    // Validerer og sender inn bestillingen hvis det ikke er feil
     function validerFelter() {
         let feil = 0; // Teller for å spore antall feil i valideringen
 
         // Henter verdier og validerer dem
-        const billett = {
-            film : $("#velgFilm").find(":selected").val(),
+        const bestilling = {
+            film: $("#film").val(), // Riktig valg fra rullegardinmeny
             antall: $("#antall").val(),
             fornavn: $("#fornavn").val(),
             etternavn: $("#etternavn").val(),
@@ -14,7 +21,7 @@ $(document).ready(function() {
         };
 
         // Validering av filmvalg
-        if (billett.film === "") {
+        if (bestilling.film === "") {
             $("#filmError").html("<span style='color: deeppink'>Vennligst velg en film</span>");
             feil++;
         } else {
@@ -22,7 +29,7 @@ $(document).ready(function() {
         }
 
         // Validering av antall billetter
-        if (isNaN(billett.antall) || billett.antall === "") {
+        if (isNaN(bestilling.antall) || bestilling.antall === "") {
             $("#antallError").html("<span style='color: deeppink'>Vennligst angi antall billetter</span>");
             feil++;
         } else {
@@ -30,7 +37,7 @@ $(document).ready(function() {
         }
 
         // Validering av fornavn
-        if (billett.fornavn === "" || !isNaN(billett.fornavn)) {
+        if (bestilling.fornavn === "" || !isNaN(bestilling.fornavn)) {
             $("#fornavnError").html("<span style='color: deeppink'>Vennligst skriv inn ditt fornavn</span>");
             feil++;
         } else {
@@ -38,7 +45,7 @@ $(document).ready(function() {
         }
 
         // Validering av etternavn
-        if (billett.etternavn === "" || !isNaN(billett.etternavn)) {
+        if (bestilling.etternavn === "" || !isNaN(bestilling.etternavn)) {
             $("#etternavnError").html("<span style='color: deeppink'>Vennligst skriv inn ditt etternavn</span>");
             feil++;
         } else {
@@ -46,7 +53,7 @@ $(document).ready(function() {
         }
 
         // Validering av adresse
-        if (billett.adresse === "") {
+        if (bestilling.adresse === "") {
             $("#adresseError").html("<span style='color: deeppink'>Vennligst skriv inn din adresse</span>");
             feil++;
         } else {
@@ -54,7 +61,7 @@ $(document).ready(function() {
         }
 
         // Validering av telefonnummer
-        if (!billett.telefonnr.match(/^[0-9]{8}$/)) {
+        if (!bestilling.telefonnr.match(/^[0-9]{8}$/)) {
             $("#telefonnrError").html("<span style='color: deeppink'>Vennligst skriv inn et gyldig telefonnummer</span>");
             feil++;
         } else {
@@ -62,7 +69,7 @@ $(document).ready(function() {
         }
 
         // Validering av epost
-        if (!billett.epost.match(/^[A-Za-z\._\-0-9]+@[A-Za-z]+[\.][a-z]{2,4}$/)) {
+        if (!bestilling.epost.match(/^[A-Za-z\._\-0-9]+@[A-Za-z]+[\.][a-z]{2,4}$/)) {
             $("#epostError").html("<span style='color: deeppink'>Vennligst skriv inn en gyldig epostadresse</span>");
             feil++;
         } else {
@@ -71,54 +78,48 @@ $(document).ready(function() {
 
         // Sjekker om alle feltene er korrekt utfylt
         if (feil === 0) {
-            sendInnBestilling(billett);
+            $.post("/lagreBestilling", bestilling, function() {
+                hentBestillinger(); // Oppdaterer listen med bestillinger
+            });
         } else {
             alert("Vennligst fyll ut alle feltene korrekt.");
         }
     }
 
-    // Sender inn bestillingen
-    function sendInnBestilling(billettData) {
-        $.post("/lagre", billettData, function() {
-            alert("Bestillingen er sendt inn!");
-            $("#sendInnForm")[0].reset(); // Tømmer skjemaet
-            hentAlleBestillinger(); // Oppdaterer liste med bestillinger
-        });
-    }
-    // Henter og viser alle bestillinger
-    function hentAlleBestillinger() {
-        $.get("/hente", function(data) {
-            let ut = "<table class='table table-striped'><thead><tr><th>Film</th><th>Antall</th><th>Fornavn</th><th>Etternavn</th><th>Adresse</th><th>Telefonnummer</th><th>Epost</th></tr></thead><tbody>";
-            data.forEach(function(bestilling) {
-                ut += `<tr><td>${bestilling.film}</td><td>${bestilling.antall}</td><td>${bestilling.fornavn}</td><td>${bestilling.etternavn}</td><td>${bestilling.adresse}</td><td>${bestilling.telefonnr}</td><td>${bestilling.epost}</td></tr>`;
-            });
-            ut += "</tbody></table>";
-            $('#bestillBilletter').html(ut);
+    // Henter data fra server og skriver det ut i rader på nettsiden.
+    function hentBestillinger() {
+        $.get("/sortedByEtternavn", function(data) {
+            formaterData(data);
         });
     }
 
-    // Funksjon for å slette alle bestillinger
-    function slettBestillinger() {
-        if (confirm("Er du sikker på at du vil slette alle bestillinger?")) {
-            $.ajax({
-                url: "/slette",
-                type: 'DELETE',
-                success: function() {
-                    $('#bestillBilletter').empty();
-                    alert("Alle bestillinger er slettet.");
-                },
-                error: function() {
-                    alert("En feil oppstod under sletting av bestillinger.");
-                }
-            });
-        }
+    // Formaterer data og viser det i en tabell
+    function formaterData(bestillinger) {
+        $("#alleBestillinger tr").remove();
+        bestillinger.forEach(function(bestilling) {
+            let rad = $("#alleBestillinger").append("<tr></tr>");
+            rad.append(`<td>${bestilling.film}</td>`);
+            rad.append(`<td>${bestilling.antall}</td>`);
+            rad.append(`<td>${bestilling.fornavn}</td>`);
+            rad.append(`<td>${bestilling.etternavn}</td>`);
+            rad.append(`<td>${bestilling.telefonnr}</td>`);
+            rad.append(`<td>${bestilling.epost}</td>`);
+        });
     }
-
-    // Knytter hendelsesbehandlere til form og sletteknapp
-    $('#sendInnForm').on('submit', function(e) {
-        e.preventDefault(); // Forhindrer vanlig form-innsending
-        validerFelter(); // Kaller valideringsfunksjonen
-    });
-
-    $('#slettKnapp').on('click', slettBestillinger); // Knytter slett-funksjonen til slett-knappen
 });
+
+// Funksjon for å slette alle bestillinger
+function slettBestilling() {
+    /* Sletter bestillingene fra databasen. */
+    $.ajax({
+        url: "/sletteBestilling",
+        type: "DELETE",
+        success: function() {
+            $("#alleBestillinger").empty();
+            alert("Alle bestillinger er slettet.");
+        },
+        error: function() {
+            alert("En feil oppstod under sletting av bestillinger.");
+        }
+    });
+}
