@@ -10,8 +10,8 @@ public class BestillingController {
 
     // Endring fra "/saveInfo" til "/lagreBestillinger"
     @PostMapping("/lagreBestillinger")
-    public void lagreBestilling(@RequestBody Bestilling bestilling) {
-        rep.lagreBestilling(bestilling);
+    public void lagreBestillinger(@RequestBody Bestilling bestilling) {
+        rep.lagreBestillinger(bestilling);
     }
 
     // Endring fra "/getInfo" til "/henteBestillinger", tilpasset returnere en struktur for frontend

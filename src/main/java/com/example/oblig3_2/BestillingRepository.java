@@ -13,7 +13,7 @@ public class BestillingRepository {
     private JdbcTemplate db;
 
     // Lagrer en bestilling i databasen
-    public void lagreBestilling(Bestilling bestilling) {
+    public void lagreBestillinger(Bestilling bestilling) {
         String sql = "INSERT INTO Bestilling (film, antall, fornavn, etternavn, adresse, telefonnr, epost) VALUES (?, ?, ?, ?, ?, ?, ?)";
         db.update(sql, bestilling.getFilm(), bestilling.getAntall(), bestilling.getFornavn(), bestilling.getEtternavn(), bestilling.getAdresse(), bestilling.getTelefonnr(), bestilling.getEpost());
     }
