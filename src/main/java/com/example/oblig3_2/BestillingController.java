@@ -20,8 +20,8 @@ public class BestillingController {
     }
 
     //Hente bestilling
-    @GetMapping("/hentBestillinger")
-    public List<Bestilling> hentBestillinger() {
+    @GetMapping("/henteBestillinger")
+    public List<Bestilling> henteBestillinger() {
         String sql = "SELECT * FROM Bestilling ORDER BY etternavn";
         return db.query(sql, new BeanPropertyRowMapper<>(Bestilling.class));
     }

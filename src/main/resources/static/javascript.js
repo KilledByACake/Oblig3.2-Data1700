@@ -1,25 +1,15 @@
-$(document).ready(function () {
-    // Knytter hendelsesbehandlere til form og sletteknapp
-    $('#sendInnForm').on('submit', function(e) {
-        e.preventDefault(); // Forhindrer vanlig form-innsending
-        validerFelter(); // Kaller valideringsfunksjonen
-    });
-
-    // Validerer og sender inn bestillingen hvis det ikke er feil
-    function validerFelter() {
-        let feil = 0; // Teller for å spore antall feil i valideringen
-
-        // Henter verdier og validerer dem
-        const bestilling = {
-            film: $("#film").val(),
-            antall: $("#antall").val(),
-            fornavn: $("#fornavn").val(),
-            etternavn: $("#etternavn").val(),
-            adresse: $("#adresse").val(),
-            telefonnr: $("#telefonnr").val(),
-            epost: $("#epost").val()
-        };
-
+function bestillBilletter () {
+    let feil = 0; // Teller for å spore antall feil i valideringen
+    // Henter verdier og validerer dem
+    let bestilling = {
+        film: $("#velgFilm").val(),
+        antall: $("#antall").val(),
+        fornavn: $("#fornavn").val(),
+        etternavn: $("#etternavn").val(),
+        adresse: $("#adresse").val(),
+        telefonnr: $("#telefonnr").val(),
+        epost: $("#epost").val()
+    };
         // Validering av filmvalg
         if (bestilling.film === "") {
             $("#filmError").html("<span style='color: deeppink'>Vennligst velg en film</span>");
@@ -78,64 +68,41 @@ $(document).ready(function () {
 
         // Sjekker om alle feltene er korrekt utfylt og sender bestillingen
         if (feil === 0) {
-            // Konverterer bestilling til en JSON-streng før sending
-            const bestillingData = JSON.stringify(bestilling);
-
-            $.ajax({
-                url: "/bestillinger/lagreBestilling", // Endepunktet for POST-forespørselen
-                type: "POST",
-                contentType: "application/json", // Setter riktig content-type for JSON
-                data: bestillingData, // Sender den konverterte JSON-strengen
-                success: function(response) {
-                    alert("Bestillingen er lagret!");
-                    henteBestillinger(); // Må sørge for at denne funksjonen er definert
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert("Feil ved lagring av bestilling: " + textStatus + " - " + errorThrown);
-                }
-            });
+            $.post("/lagreBestillinger", bestilling, function () {henteBestilling();});
         } else {
             alert("Vennligst fyll ut alle feltene korrekt.");
         }
-    }
+    // Tømmer feltene
+    $("#velgFilm option").eq(0).prop("selected", true);
+    $("#antall").val(""),
+    $("#fornavn").val(""),
+    $("#etternavn").val(""),
+    $("#adresse").val(""),
+    $("#telefonnr").val(""),
+    $("#epost").val("")
+
+    //Hente bestillinger
     function henteBestillinger() {
-        $.ajax({
-            url: "/bestillinger/henteBestilling", // GET-endepunktet for å hente bestillinger
-            type: "GET",
-            contentType: "application/json",
-            success: function(bestillinger) {
-                $("#alleBestillinger").empty(); // Tømmer tabellen før nye bestillinger legges til
-                bestillinger.forEach(function(bestilling) {
-                    leggTilBestillingITabell(bestilling); // Bruker funksjonen for å legge til bestillinger i tabellen
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("Feil ved henting av bestillinger: " + textStatus + " - " + errorThrown);
-            }
-        });
-    }
-    function leggTilBestillingITabell(bestilling) {
-        let rad = $("<tr></tr>"); // Lager en ny rad
-        rad.append(`<td>${bestilling.film}</td>`);
-        rad.append(`<td>${bestilling.antall}</td>`);
-        rad.append(`<td>${bestilling.fornavn}</td>`);
-        rad.append(`<td>${bestilling.etternavn}</td>`);
-        rad.append(`<td>${bestilling.telefonnr}</td>`);
-        rad.append(`<td>${bestilling.epost}</td>`);
-        $("#alleBestillinger").append(rad); // Legger til den nye raden i tabellen
+        $.post("/henteBestillinger", bestilling, function () {henteBestillinger();});
     }
 
-    function slettBestilling() {
-        $.ajax({
-            url: "/bestillinger/sletteBestilling",
-            type: "DELETE",
-            success: function() {
-                $("#alleBestillinger").empty();
-                alert("Alle bestillinger er slettet.");
-            },
-            error: function() {
-                alert("En feil oppstod under sletting av bestillinger.");
-            }
+    //
+    function formaterData(bestilling) {
+        // Fjerner billettene som er printet ut(bare de som vises på siden ikke de på db) og deretter printer ny sortert liste
+        $("#henteBestillinger tr").remove();
+        bestillinger.forEach(function(bestilling) {
+            let rad = henteBestillinger.insertRow(0);
+            rad.insertCell(0).textContent = bestilling.film;
+            rad.insertCell(1).textContent = bestilling.antall;
+            rad.insertCell(2).textContent = bestilling.fornavn;
+            rad.insertCell(3).textContent = bestilling.etternavn;
+            rad.insertCell(4).textContent = bestilling.telefonnr;
+            rad.insertCell(5).textContent = bestilling.epost;
         });
     }
-});
+}
+
+//Sletter bestillingene
+function slettBestilling() {
+    $.post("/slettBestillinger", bestilling, function () {henteBestillinger().html;});
+}
