@@ -4,7 +4,7 @@ function bestillBilletter () {
     let bestilling = {
         film: $("#velgFilm").val(),
         antall: $("#antall").val(),
-        fornavn: $("#fornavn").val(),
+        fornavn: $("#fornavn").val(),nh
         etternavn: $("#etternavn").val(),
         adresse: $("#adresse").val(),
         telefonnr: $("#telefonnr").val(),
