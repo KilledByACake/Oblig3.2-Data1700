@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Obligatorisk - BESTILLING AV BESTILLINGER</title>
-  <link src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="javascript.js"></script>
 </head>
@@ -14,44 +14,45 @@
     <form onsubmit="bestillBilletter(); return false">
       <div class="form-group">
         <label for="film" class="form-label">Film:</label>
-        <form class="form-control" id="film" required>
+        <select class="form-control" id="film" required>
           <option value="" selected>Velg film</option>
           <option value="Githubs Undergang">Githubs Undergang</option>
           <option value="The Hub of Gits">The Hub of Gits</option>
-        </form>
+        </select>
       </div>
 
-      <form class="form-group">
+      <div class="form-group">
         <label for="antall">Antall billetter:</label>
         <input type="text" class="form-control" id="antall" pattern="[0-9]+" title="Velg antall billetter!" required>
-      </form>
+      </div>
 
-      <form class="form-group">
+      <div class="form-group">
         <label for="fornavn">Fornavn:</label>
         <input type="text" class="form-control" id="fornavn" required>
-      </form>
+      </div>
 
-      <form class="form-group">
+      <div class="form-group">
         <label for="etternavn">Etternavn:</label>
         <input type="text" class="form-control" id="etternavn" required>
-      </form>
+      </div>
 
-      <form class="form-group">
+      <div class="form-group">
         <label for="adresse">Adresse:</label>
         <input type="text" class="form-control" id="adresse" required>
-      </form>
+      </div>
 
-      <form class="form-group">
+      <div class="form-group">
         <label for="telefonnr">Telefonnummer:</label>
         <input type="text" class="form-control" id="telefonnr" pattern="[0-9]{8}" title="Ugyldig telefonnummer!" required>
-      </form>
+      </div>
 
-      <form class="form-group">
+      <div class="form-group">
         <label for="epost">Epostadresse:</label>
         <input type="text" class="form-control" id="epost"  pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}" title="Ugyldig epost!" required>
-      </form>
+      </div>
+
+      <button type=submit" id="bestillBilletter" class="btn btn-primary">Send inn bestilling</button>
     </form>
-    <button type=submit" id="bestillBilletter" class="btn btn-primary">Send inn bestilling</button>
   </section>
 
   <section>
@@ -60,6 +61,6 @@
     <div id="utput"></div>
     <button id="slettBestillinger" class="btn btn-danger">Slett alle bestillinger</button>
   </section>
-</div>
+</div>>
 </body>
 </html>
