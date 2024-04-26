@@ -34,11 +34,9 @@ public class Bestilling {
     }
 
     // Get og Set
-
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -46,7 +44,6 @@ public class Bestilling {
     public String getFilm() {
         return film;
     }
-
     public void setFilm(String film) {
         this.film = film;
     }
@@ -54,7 +51,6 @@ public class Bestilling {
     public int getAntall() {
         return antall;
     }
-
     public void setAntall(int antall) {
         this.antall = antall;
     }
@@ -62,7 +58,6 @@ public class Bestilling {
     public String getFornavn() {
         return fornavn;
     }
-
     public void setFornavn(String fornavn) {
         this.fornavn = fornavn;
     }
@@ -70,7 +65,6 @@ public class Bestilling {
     public String getEtternavn() {
         return etternavn;
     }
-
     public void setEtternavn(String etternavn) {
         this.etternavn = etternavn;
     }
@@ -78,7 +72,6 @@ public class Bestilling {
     public String getAdresse() {
         return adresse;
     }
-
     public void setAdresse(String adresse) {
         this.adresse = adresse;
     }
@@ -86,7 +79,6 @@ public class Bestilling {
     public String getTelefonnr() {
         return telefonnr;
     }
-
     public void setTelefonnr(String telefonnr) {
         this.telefonnr = telefonnr;
     }
@@ -94,7 +86,6 @@ public class Bestilling {
     public String getEpost() {
         return epost;
     }
-
     public void setEpost(String epost) {
         this.epost = epost;
     }

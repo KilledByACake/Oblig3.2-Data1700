@@ -1,28 +1,38 @@
 package com.example.oblig3_2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 @RestController
 public class BestillingController {
     @Autowired
     private BestillingRepository rep;
 
-    // Endring fra "/saveInfo" til "/lagreBestillinger"
+    // Lagre bestillinger
     @PostMapping("/lagreBestillinger")
-    public void lagreBestillinger(@RequestBody Bestilling bestilling) {
-        rep.lagreBestillinger(bestilling);
+    public String lagreBestillinger(Bestilling bestilling) {
+        try {
+            rep.save(bestilling);
+            return "Bestillingen ble sendt!";
+        } catch (Exception e) {
+            return "Bestillingen ble ikke sendt!" + e.getMessage();
+        }
     }
 
-    // Endring fra "/getInfo" til "/henteBestillinger", tilpasset returnere en struktur for frontend
+    // Hente bestillinger
     @GetMapping("/henteBestillinger")
-    public List<Bestilling> henteBestillinger() {
-        return rep.alleBestillinger();
+    public void henteBestillinger() {
+        rep.findAll();
     }
 
-    // Endring fra "/deleteInfo" til "/slettBestillinger", slette alle bestillinger
+    // Slette betillinger
     @DeleteMapping("/slettBestillinger")
     public void slettBestillinger() {
-        rep.slettBestillinger();
+        rep.deleteAll();
     }
 }

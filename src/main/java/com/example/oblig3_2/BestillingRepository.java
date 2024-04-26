@@ -6,27 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 @Repository
-public class BestillingRepository {
-    @Autowired
-    private JdbcTemplate db;
+public interface BestillingRepository extends JpaRepository<Bestilling,Long> {
 
-    // Lagrer en bestilling i databasen
-    public void lagreBestillinger(Bestilling bestilling) {
-        String sql = "INSERT INTO Bestilling (film, antall, fornavn, etternavn, adresse, telefonnr, epost) VALUES (?,?,?,?,?,?,?)";
-        db.update(sql, bestilling.getFilm(), bestilling.getAntall(), bestilling.getFornavn(), bestilling.getEtternavn(), bestilling.getAdresse(), bestilling.getTelefonnr(), bestilling.getEpost());
-    }
-
-    //Henter liste med alle bestillinger
-    public List<Bestilling> alleBestillinger() {
-        String sql = "SELECT * FROM Bestilling";
-        List<Bestilling> alleBestillinger = db.query(sql, new BeanPropertyRowMapper<>(Bestilling.class));
-        return alleBestillinger;
-    }
-
-    //Sletter alle bestillinger
-    public void slettBestillinger() {
-        String sql = "DELETE FROM Bestilling";
-        db.update(sql);
-    }
 }

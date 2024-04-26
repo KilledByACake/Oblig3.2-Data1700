@@ -4,14 +4,7 @@ Navn: Elisabeth Mathisen
 Studentnr: elmat7346
 Github konto: Killed By a Cake
 Github link:https://github.com/KilledByACake/Oblig3.2-Data1700.git
-OBS: Når jeg fyller ut inputen og sender det så sendes det tomt, på consolen viser det et splitt sekund en error-melding
-der det bare står "uncaught", men det blir lagt til i databasen (mest sannsylig blir det tvunget inn i databasen hver 
-gang jeg trykker send). Eneste jeg får opp er ID, ellers står resten av tabellen tom.
-
-Jeg har spurt 8+ personer om de kan se på koden min, men ingen klarer helt å finne ut hva som er feil.
-Beskrivelse: Obligatorisk oppgave 3 i DATA1700 WebProgrammering. Bygger på Oblig 1 og 2.
-
-Hvem enn som ser koden min, pretty please om du ser hva som er off, gjerne gi meg en ledertråd for jeg er stuck
+Video av database som fungerer er på githbub.
 
 I korte trekk består de obligatoriske oppgaven av dette slik jeg har forstått.
 

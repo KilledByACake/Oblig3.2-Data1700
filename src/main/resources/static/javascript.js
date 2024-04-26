@@ -1,6 +1,6 @@
 function bestillBilletter() {
-    let bestilling = {
-        film: $("#film").val(),
+    const bestilling = {
+        film: $("#velgFilm").find(":selected").text(),
         antall: $("#antall").val(),
         fornavn: $("#fornavn").val(),
         etternavn: $("#etternavn").val(),
@@ -8,19 +8,14 @@ function bestillBilletter() {
         telefonnr: $("#telefonnr").val(),
         epost: $("#epost").val()
     };
-    console.log(bestilling);
-    //lagrer bestillingen og kjører henteBestilling()
-    $.ajax({
-        url: '/lagreBestillinger',
-        type: 'POST',
-        data: JSON.stringify(bestilling),
-        contentType: 'application/json',
-        success: function() {
-            henteBestillinger();
-        }
+
+    // Sender bestilling til server og oppdaterer bestillingene
+    $.post("/lagreBestillinger", bestilling, function () {
+        henteBestillinger();
     });
-    //Tømmer input
-    $("#film").val("");
+
+    // Tømmer input-feltene
+    $("#velgFilm").val("velgfilm"); // Setter tilbake til standard valg
     $("#antall").val("");
     $("#fornavn").val("");
     $("#etternavn").val("");
@@ -33,32 +28,34 @@ function bestillBilletter() {
 function henteBestillinger() {
     $.get("/henteBestillinger", function (data) {
         formaterData(data);
-        console.log(data)
     });
 }
 
 // Formaterer Data
 function formaterData(bestillinger) {
-    let ut = "<table class='table table-striped table-bordered'><tr>" +
-        "    <th><strong>Film</strong></th>\n" +
-        "    <th><strong>Antall</strong></th>\n" +
-        "    <th><strong>Fornavn</strong></th>\n" +
-        "    <th><strong>Etternavn</strong></th>\n" +
-        "    <th><strong>Adresse</strong></th>\n" +
-        "    <th><strong>Epost</strong></th>\n" +
-        "    <th><strong>Slett</strong></th>\n" +
-        "    <th><strong>Endre</strong></th>\n" +
-        "</tr><br>";
-
-    //  Gjør om til row
-    for (let b of bestillinger) {
-        ut += "<tr>";
-        ut += "<td>" + b.film + "</td><td>" + b.antall + "</td><td>" + b.fornavn + "</td><td>" + b.etternavn + "</td><td>" +
-            b.adresse + "</td><td>" + b.telefonnr + "</td><td>" + b.epost + "</td>";
-        ut += "</tr>";
+    let ut = "<table class='table table-striped'>" +
+        "<tr>" +
+        "<th>Film</th>" +
+        "<th>Antall</th>" +
+        "<th>Fornavn</th>" +
+        "<th>Etternavn</th>" +
+        "<th>Adresse</th>" +
+        "<th>Telefonnr</th>" +
+        "<th>Epost</th>" +
+        "</tr>";
+    for (let bestilling of bestillinger) {
+        ut += "<tr>" +
+            "<td>" + bestilling.film + "</td>" +
+            "<td>" + bestilling.antall + "</td>" +
+            "<td>" + bestilling.fornavn + "</td>" +
+            "<td>" + bestilling.etternavn + "</td>" +
+            "<td>" + bestilling.adresse + "</td>" +
+            "<td>" + bestilling.telefonnr + "</td>" +
+            "<td>" + bestilling.epost + "</td>" +
+            "</tr>";
     }
     ut += "</table>";
-    $("#utput").html(ut);
+    $("#bestillinger").html(ut);
 }
 
 // Sletter bestillingene
