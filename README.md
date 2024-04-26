@@ -4,7 +4,7 @@ Navn: Elisabeth Mathisen
 Studentnr: elmat7346
 Github konto: Killed By a Cake
 Github link:https://github.com/KilledByACake/Oblig3.2-Data1700.git
-Video av database som fungerer er på githbub.
+Video av database: https://youtu.be/eTqIHCGPR2o
 
 I korte trekk består de obligatoriske oppgaven av dette slik jeg har forstått.
 
