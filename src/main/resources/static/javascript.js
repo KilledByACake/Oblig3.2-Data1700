@@ -33,6 +33,7 @@ function bestillBilletter() {
 function henteBestillinger() {
     $.get("/henteBestillinger", function (data) {
         formaterData(data);
+        console.log(data)
     });
 }
 
@@ -53,7 +54,7 @@ function formaterData(bestillinger) {
     for (let b of bestillinger) {
         ut += "<tr>";
         ut += "<td>" + b.film + "</td><td>" + b.antall + "</td><td>" + b.fornavn + "</td><td>" + b.etternavn + "</td><td>" +
-            b.adresse + "</td><td>" + b.telefonnr + "</td><td>" + b.epost + "</td><td></td>";
+            b.adresse + "</td><td>" + b.telefonnr + "</td><td>" + b.epost + "</td>";
         ut += "</tr>";
     }
     ut += "</table>";
